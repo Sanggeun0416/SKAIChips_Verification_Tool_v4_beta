@@ -1003,8 +1003,6 @@ namespace BlueTooth
                 p = c.CommandParameters.Add("Encryption_Enable", 1, ParameterDataType.Bytes, "0x00=OFF, 0x01=ON");
 
                 p.Data = new byte[] { 0x01 };
-
-                HCI_Set_Connection_Encryption(OCF = 0x0013)
             }
 
             private void InitControlAndBasebandCommands(CommandGroup cg)
