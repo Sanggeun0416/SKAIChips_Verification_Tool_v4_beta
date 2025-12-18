@@ -1,0 +1,36 @@
+# Remove this line if you want to inherit settings from a parent directory.
+root = true
+
+[*.cs]
+charset = utf-8
+indent_style = space
+indent_size = 4
+tab_width = 4
+end_of_line = crlf
+insert_final_newline = true
+
+# --- Readability ---
+
+# 1 blank line between members (methods/properties/constructors/etc.)
+csharp_new_line_between_members = true
+
+# Keep fields grouped without forced blank lines
+csharp_new_line_between_fields = false
+
+# Prefer braces for maintainability
+csharp_prefer_braces = true:suggestion
+
+# Keep using directives outside namespace (WinForms files stay consistent)
+csharp_using_directive_placement = outside_namespace:suggestion
+
+# Do not allow multiple consecutive blank lines (keeps files tidy)
+dotnet_style_allow_multiple_blank_lines_experimental = false
+
+# --- Naming / style (lightweight; avoids noisy analyzer fights) ---
+dotnet_style_qualification_for_field = false:suggestion
+dotnet_style_qualification_for_property = false:suggestion
+dotnet_style_qualification_for_method = false:suggestion
+dotnet_style_qualification_for_event = false:suggestion
+
+# Sort System usings first
+dotnet_sort_system_directives_first = true
