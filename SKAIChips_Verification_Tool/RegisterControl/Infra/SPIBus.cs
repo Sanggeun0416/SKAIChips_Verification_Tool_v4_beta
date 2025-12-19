@@ -97,7 +97,6 @@ namespace SKAIChips_Verification_Tool.RegisterControl.Infra
                 return;
             }
 
-            
             if (rx.Length > 0)
             {
                 var w = tx.ToArray();

@@ -7,7 +7,10 @@ namespace SKAIChips_Verification_Tool
     {
         private readonly IChipProject _project;
 
-        public ProtocolSettings? Result { get; private set; }
+        public ProtocolSettings? Result
+        {
+            get; private set;
+        }
 
         public ProtocolSetupForm(IChipProject project, ProtocolSettings current)
         {
@@ -54,7 +57,7 @@ namespace SKAIChips_Verification_Tool
 
         private void ApplyCurrent(ProtocolSettings current)
         {
-            
+
             for (var i = 0; i < comboProtocol.Items.Count; i++)
             {
                 if (comboProtocol.Items[i] is ProtocolType pt && pt == current.ProtocolType)
@@ -64,7 +67,6 @@ namespace SKAIChips_Verification_Tool
                 }
             }
 
-            
             if (current.ProtocolType == ProtocolType.I2C)
             {
                 if (current.SpeedKbps > 0 && current.SpeedKbps >= (int)numSpeed.Minimum && current.SpeedKbps <= (int)numSpeed.Maximum)
@@ -72,7 +74,7 @@ namespace SKAIChips_Verification_Tool
 
                 txtSlaveAddr.Text = $"0x{current.I2cSlaveAddress:X2}";
             }
-            
+
             else if (current.ProtocolType == ProtocolType.SPI)
             {
                 if (current.SpiClockKHz > 0 && current.SpiClockKHz >= (int)numSpeed.Minimum && current.SpiClockKHz <= (int)numSpeed.Maximum)
@@ -130,7 +132,6 @@ namespace SKAIChips_Verification_Tool
                     return;
                 }
 
-                
                 settings.SpiLsbFirst = false;
             }
 
@@ -178,8 +179,10 @@ namespace SKAIChips_Verification_Tool
 
         private static void SetNumericWithinRange(NumericUpDown n, decimal value)
         {
-            if (value < n.Minimum) value = n.Minimum;
-            if (value > n.Maximum) value = n.Maximum;
+            if (value < n.Minimum)
+                value = n.Minimum;
+            if (value > n.Maximum)
+                value = n.Maximum;
             n.Value = value;
         }
 

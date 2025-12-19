@@ -23,13 +23,11 @@
             get; set;
         }
 
-        
         public int SpeedKbps { get; set; } = 400;
         public byte I2cSlaveAddress { get; set; } = 0x00;
 
-        
         public int SpiClockKHz { get; set; } = 1000;
-        public int SpiMode { get; set; } = 0;     
+        public int SpiMode { get; set; } = 0;
         public bool SpiLsbFirst { get; set; } = false;
     }
 }

@@ -599,7 +599,6 @@ namespace SKAIChips_Verification_Tool
 
             bool isMockProject = _selectedProject is MockProject;
 
-            
             DisconnectBus();
 
             if (isMockProject)
@@ -923,7 +922,6 @@ namespace SKAIChips_Verification_Tool
                         var ws = wb.Worksheet(sheetName);
                         string[,] data = ExcelHelper.WorksheetToArray(ws);
 
-                        
                         RegisterGroup group = RegisterMapParser.MakeRegisterGroup(sheetName, data);
                         _groups.Add(group);
                     }
@@ -1663,7 +1661,6 @@ namespace SKAIChips_Verification_Tool
                 return;
             }
 
-            
             if (info.Id == "FW.FLASH_WRITE")
             {
                 using (var ofd = new OpenFileDialog())

@@ -47,7 +47,7 @@ namespace SKAIChips_Verification_Tool.RegisterControl.Infra
             status |= _ftdi.SetTimeouts(5000, 5000);
             status |= _ftdi.SetLatency(16);
             status |= _ftdi.SetBitMode(0x00, 0x00);
-            status |= _ftdi.SetBitMode(0x00, 0x02); 
+            status |= _ftdi.SetBitMode(0x00, 0x02);
 
             if (status != FTDI.FT_STATUS.FT_OK)
             {
@@ -57,7 +57,6 @@ namespace SKAIChips_Verification_Tool.RegisterControl.Infra
 
             Thread.Sleep(50);
 
-            
             for (byte b = 0xAA; b <= 0xAB; b++)
             {
                 _queue.Clear();
@@ -131,7 +130,7 @@ namespace SKAIChips_Verification_Tool.RegisterControl.Infra
             _queue.Set(Command.ThreePhase.Enable);
 
             _queue.Set(Command.DriveOnlyZero);
-            _queue.Set(7);   
+            _queue.Set(7);
             _queue.Set(0);
 
             if (!SendCommand())
@@ -376,7 +375,7 @@ namespace SKAIChips_Verification_Tool.RegisterControl.Infra
 
         private bool SetClock(int clockKHz)
         {
-            double baseKHz = 60000.0; 
+            double baseKHz = 60000.0;
             ushort divisor = (ushort)(baseKHz / (2.0 * clockKHz) - 1.0);
 
             _queue.Set(Command.Clock.SetDivisor);

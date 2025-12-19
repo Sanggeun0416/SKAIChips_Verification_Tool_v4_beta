@@ -154,25 +154,25 @@ namespace SKAIChips_Verification_Tool.RegisterControl.Chips
 
         private enum FLASH_CMD : byte
         {
-            WRSR = 0x01,    
-            PP = 0x02,      
-            RDCMD = 0x03,   
-            WRDI = 0x04,    
-            RDSR = 0x05,    
-            WREN = 0x06,    
-            F_RD = 0x0B,    
-            SE = 0x20,      
-            BE32 = 0x52,    
-            RSTEN = 0x66,   
-            REMS = 0x90,    
-            RST = 0x99,     
-            RDID = 0x9F,    
-            RES = 0xAB,     
-            ENSO = 0xB1,    
-            DP = 0xB9,      
-            EXSO = 0xC1,    
-            CE = 0xC7,      
-            BE64 = 0xD8,    
+            WRSR = 0x01,
+            PP = 0x02,
+            RDCMD = 0x03,
+            WRDI = 0x04,
+            RDSR = 0x05,
+            WREN = 0x06,
+            F_RD = 0x0B,
+            SE = 0x20,
+            BE32 = 0x52,
+            RSTEN = 0x66,
+            REMS = 0x90,
+            RST = 0x99,
+            RDID = 0x9F,
+            RES = 0xAB,
+            ENSO = 0xB1,
+            DP = 0xB9,
+            EXSO = 0xC1,
+            CE = 0xC7,
+            BE64 = 0xD8,
         }
 
         public IReadOnlyList<ChipTestInfo> Tests
@@ -642,7 +642,7 @@ namespace SKAIChips_Verification_Tool.RegisterControl.Chips
                 byte[] pageBuffer = new byte[PageSize];
                 byte[] readBuffer = new byte[PageSize];
 
-                for (uint flashAddress = 0; flashAddress < fwData.Length; flashAddress += (uint)PageSize)
+                for (uint flashAddress = 0; flashAddress < fwData.Length; flashAddress += PageSize)
                 {
                     ct.ThrowIfCancellationRequested();
 
@@ -793,7 +793,7 @@ namespace SKAIChips_Verification_Tool.RegisterControl.Chips
                         if ((addr % 0x1000) == 0)
                             await log("INFO", $"Erase verify @ 0x{addr:X8}");
 
-                        int len = (int)Math.Min((uint)PageSize, flashSize - addr);
+                        int len = (int)Math.Min(PageSize, flashSize - addr);
                         readBuffer = new byte[len];
                         readBuffer = Read_FLASH_BUFFER(addr, len);
 
@@ -816,7 +816,7 @@ namespace SKAIChips_Verification_Tool.RegisterControl.Chips
                         if ((addr % 0x1000) == 0)
                             await log("INFO", $"Write pattern @ 0x{addr:X8}");
 
-                        int len = (int)Math.Min((uint)PageSize, flashSize - addr);
+                        int len = (int)Math.Min(PageSize, flashSize - addr);
 
                         for (int i = 0; i < len; i++)
                             pageBuffer[i] = pattern;
@@ -959,7 +959,7 @@ namespace SKAIChips_Verification_Tool.RegisterControl.Chips
                 _chip.WriteRegister(RegFlashTxBase + (uint)i, word);
             }
 
-            _chip.WriteRegister(RegFlashCmd, (uint)((FlashCmdPageProgram << 24) | (flashAddress & 0xFFFFFFu)));
+            _chip.WriteRegister(RegFlashCmd, (FlashCmdPageProgram << 24) | (flashAddress & 0xFFFFFFu));
 
             for (int retry = 0; retry < 2000; retry++)
             {

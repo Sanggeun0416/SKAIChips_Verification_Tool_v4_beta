@@ -46,7 +46,7 @@ namespace SKAIChips_Verification_Tool.RegisterControl.Infra
 
             if (_handle != IntPtr.Zero)
             {
-                
+
                 FT4222_I2CMaster_Reset(_handle);
                 FT4222_SPI_Reset(_handle);
                 FT4222_UnInitialize(_handle);
@@ -143,7 +143,7 @@ namespace SKAIChips_Verification_Tool.RegisterControl.Infra
                 clkDiv,
                 cpol,
                 cpha,
-                0x01); 
+                0x01);
 
             if (st != FT4222_STATUS.FT4222_OK)
                 return false;

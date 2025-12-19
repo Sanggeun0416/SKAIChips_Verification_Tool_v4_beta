@@ -54,23 +54,19 @@ namespace SKAIChips_Verification_Tool.HCIControl.UI
 
         private void HCIControlForm_Load(object sender, EventArgs e)
         {
-            
-            SetPortOpenCloseButtonEnabled(true);
-            FindSerialPorts(); 
-            FindUsbDevices(); 
 
-            
+            SetPortOpenCloseButtonEnabled(true);
+            FindSerialPorts();
+            FindUsbDevices();
+
             ((System.ComponentModel.ISupportInitialize)(this.HCISplitContainer)).BeginInit();
-            HCISplitContainer.SplitterDistance = (int)formInfo.SplitDistance;
+            HCISplitContainer.SplitterDistance = formInfo.SplitDistance;
             ((System.ComponentModel.ISupportInitialize)(this.HCISplitContainer)).EndInit();
             HCICommandTreeView.ContextMenuStrip = TreeContextMenuStrip;
             for (int i = 0; i < HciMgr.HCICommands.Count; i++)
                 HCICommandTreeView.Nodes.Add(HciMgr.HCICommands[i].Node);
             HCICommandTreeView.ShowNodeToolTips = true;
 
-            
-
-            
             HCIScriptTreeView.ContextMenuStrip = HCIScriptContextMenuStrip;
             HCIScriptTreeView.ShowNodeToolTips = true;
             GetHCIScriptFiles();
@@ -86,23 +82,19 @@ namespace SKAIChips_Verification_Tool.HCIControl.UI
 
         private void HCIControlForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            
-            
+
             formInfo.SplitDistance = HCISplitContainer.SplitterDistance;
         }
 
         private void HCIControlForm_SizeChanged(object sender, EventArgs e)
         {
-            
+
             if (((Size.Width == MdiParent.Size.Width - 4) && (Size.Height == MdiParent.Size.Height - 28))
                 || ((Size.Width == 160) && (Size.Height == 27)))
                 return;
             formInfo.FormSize = this.Size;
         }
 
-        
-        
-        
         private void FindSerialPorts()
         {
             string[] SerialPorts = HciMgr.SearchSerialPort();
@@ -125,9 +117,7 @@ namespace SKAIChips_Verification_Tool.HCIControl.UI
             this.PortBaudRateComboBox.SelectedIndex = 4;
             PortBaudRateComboBox.SelectedItem = formInfo.SerialBaudRate.ToString();
         }
-        
-        
-        
+
         private void FindUsbDevices()
         {
             string[] ValidDevices = HciMgr.SearchUsbDevices();
@@ -166,7 +156,7 @@ namespace SKAIChips_Verification_Tool.HCIControl.UI
                 }
                 fTDI.Close();
 
-                if ((PortTabControl.SelectedIndex == 0) && (SerialPortComboBox.SelectedIndex >= 0)) 
+                if ((PortTabControl.SelectedIndex == 0) && (SerialPortComboBox.SelectedIndex >= 0))
                 {
                     formInfo.SerialPortIndex = SerialPortComboBox.SelectedIndex;
                     formInfo.SerialBaudRate = int.Parse(PortBaudRateComboBox.SelectedItem.ToString());
@@ -181,8 +171,7 @@ namespace SKAIChips_Verification_Tool.HCIControl.UI
                 if (HciMgr.IsOpen)
                 {
                     SetPortOpenCloseButtonEnabled(false);
-                    
-                    
+
                 }
             }
         }
@@ -253,17 +242,17 @@ namespace SKAIChips_Verification_Tool.HCIControl.UI
         {
             switch (e.Node.Level)
             {
-                case 0: 
+                case 0:
                     CurHciCmdGroup = HciMgr.HCICommands[e.Node.Index];
                     CurHciCommand = null;
                     CurHciParameter = null;
                     break;
-                case 1: 
+                case 1:
                     CurHciCmdGroup = HciMgr.HCICommands[e.Node.Parent.Index];
                     CurHciCommand = CurHciCmdGroup.Commands[e.Node.Index];
                     CurHciParameter = null;
                     break;
-                case 2: 
+                case 2:
                     CurHciCmdGroup = HciMgr.HCICommands[e.Node.Parent.Parent.Index];
                     CurHciCommand = CurHciCmdGroup.Commands[e.Node.Parent.Index];
                     CurHciParameter = CurHciCommand.CommandParameters[e.Node.Index];
@@ -304,11 +293,11 @@ namespace SKAIChips_Verification_Tool.HCIControl.UI
             dtHCIParameter.Columns.Clear();
             if (Para != null)
             {
-                
+
                 for (int i = Para.Size - 1; i >= 0; i--)
                     dtHCIParameter.Columns.Add("B" + i.ToString(), typeof(string));
                 dtHCIParameter.Rows.Add();
-                
+
                 for (int i = Para.Size - 1; i >= 0; i--)
                     dtHCIParameter.Rows[0]["B" + i.ToString()] = Para.Data[i].ToString("X2");
 
@@ -345,9 +334,7 @@ namespace SKAIChips_Verification_Tool.HCIControl.UI
                     else
                     {
                         SelectedHciParameter.Data[SelectedHciParameter.Size - 1 - e.ColumnIndex] = Data;
-                        
-                        
-                        
+
                     }
                 }
             }
@@ -411,13 +398,12 @@ namespace SKAIChips_Verification_Tool.HCIControl.UI
 
             using (var writer = new StreamWriter(filePath, false, Encoding.UTF8))
             {
-                
+
                 var headers = grid.Columns
                     .Cast<DataGridViewColumn>()
                     .Select(c => c.HeaderText);
                 writer.WriteLine(string.Join(",", headers.Select(EscapeCsv)));
 
-                
                 foreach (DataGridViewRow row in grid.Rows)
                 {
                     if (row.IsNewRow)
@@ -701,13 +687,13 @@ namespace SKAIChips_Verification_Tool.HCIControl.UI
         {
             switch (e.Node.Level)
             {
-                case 0: 
+                case 0:
                     HciScrCommand = HCIScript[e.Node.Index];
                     HciScrCommandIndex = e.Node.Index;
                     HciScrParameter = null;
                     HciScrParameterIndex = -1;
                     break;
-                case 1: 
+                case 1:
                     HciScrCommand = HCIScript[e.Node.Parent.Index];
                     HciScrCommandIndex = e.Node.Parent.Index;
                     HciScrParameter = HciScrCommand.CommandParameters[e.Node.Index];
@@ -773,21 +759,21 @@ namespace SKAIChips_Verification_Tool.HCIControl.UI
             BlueTooth.HCI.Command TxTest = null;
             BlueTooth.HCI.Command TestEnd = null;
 
-            TxTest = HciMgr.GetCommand(0x0C03); 
+            TxTest = HciMgr.GetCommand(0x0C03);
             TxTest.Send();
-            TestEnd = HciMgr.GetCommand(0x201F); 
+            TestEnd = HciMgr.GetCommand(0x201F);
 
-            TxTest = HciMgr.GetCommand(0x201E); 
-            TxTest.CommandParameters[0].Data[0] = 0x13; 
-            TxTest.CommandParameters[1].Data[0] = 37; 
+            TxTest = HciMgr.GetCommand(0x201E);
+            TxTest.CommandParameters[0].Data[0] = 0x13;
+            TxTest.CommandParameters[1].Data[0] = 37;
 
             while (!HciTestWorker.CancellationPending)
             {
-                TxTest.CommandParameters[2].Data[0] = 0x01; 
+                TxTest.CommandParameters[2].Data[0] = 0x01;
                 TxTest.Send();
                 System.Threading.Thread.Sleep(30);
                 TestEnd.Send();
-                TxTest.CommandParameters[2].Data[0] = 0x02; 
+                TxTest.CommandParameters[2].Data[0] = 0x02;
                 TxTest.Send();
                 System.Threading.Thread.Sleep(30);
                 TestEnd.Send();

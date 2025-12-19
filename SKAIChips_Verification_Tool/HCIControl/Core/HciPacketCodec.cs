@@ -2,7 +2,7 @@
 {
     public static class HciPacketCodec
     {
-        
+
         public static byte[] EncodeCommand(HciCommandPacket packet)
         {
             if (packet == null)
@@ -25,7 +25,6 @@
             return buffer;
         }
 
-        
         public static bool TryDecodeEvent(ReadOnlySpan<byte> buffer, out HciEventPacket packet, out int bytesConsumed)
         {
             packet = null;

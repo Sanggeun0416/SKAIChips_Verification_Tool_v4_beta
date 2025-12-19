@@ -4,82 +4,56 @@ namespace BlueTooth
 {
     namespace HCI
     {
-        
-        
-        
-        
-        
+
         public delegate bool WriteCommand(Command command);
-        
-        
-        
-        
-        
-        
+
         public delegate void SetParametersData(ParameterCollection Parameters, byte[] DataBuffer, int StartIndex);
 
-        
-        
-        
         public enum ParameterType
         {
-            
+
             Data,
-            
-            
-            
-            
+
             ArrayIndicator,
-            
-            
-            
-            
+
             ArrayData,
-            
-            
-            
-            
+
             ResizableIndicator,
-            
+
             ResizableData,
-            
+
             ArrayDataAndResizableIndicator,
-            
+
             ArrayDataAndResizableData,
         }
-        
-        
-        
+
         public enum ParameterDataType
         {
-            
+
             S8,
-            
+
             U16,
-            
+
             String,
-            
+
             Bytes,
-            
+
             Number,
-            
+
             BLE_Channel,
 
-            
             Status,
-            
+
             CoreVersion,
 
-            
             Time_625usec = 625,
-            
+
             Time_1_25msec = 1250,
-            
+
             Time_10msec = 10000,
 
-            
             Time_1usec,
-            
+
             Time_1sec = 1000000,
         }
 
@@ -131,60 +105,49 @@ namespace BlueTooth
             Connection
         }
 
-        
-        
-        
         public class Parameter
         {
-            
+
             public string Name
             {
                 get;
             }
             private byte ParaSize = 0;
-            
+
             public byte[] Data
             {
                 get; set;
             }
-            
+
             public string Description
             {
                 get; set;
             }
-            
+
             public string Information
             {
                 get; set;
             }
-            
+
             public Color InfoColor
             {
                 get; set;
             }
             private ParameterDataType ParaDataType;
             private ParameterType ParaType;
-            
+
             public TreeNode Node
             {
                 get; set;
             }
-            
+
             public ParameterCollection Parent
             {
                 get; set;
             }
-            
+
             public event EventHandler SizeChanged;
 
-            
-            
-            
-            
-            
-            
-            
-            
             public Parameter(string Name, byte Size, ParameterDataType DataType, string Description = "", ParameterType Type = ParameterType.Data)
             {
                 Node = new TreeNode(Name)
@@ -202,15 +165,11 @@ namespace BlueTooth
                 Information = "";
             }
 
-            
-            
-            
             protected virtual void OnSizeChanged(EventArgs e)
             {
                 SizeChanged?.Invoke(this, e);
             }
 
-            
             public byte Size
             {
                 get
@@ -227,7 +186,7 @@ namespace BlueTooth
                     }
                 }
             }
-            
+
             public ParameterDataType DataType
             {
                 get
@@ -235,7 +194,7 @@ namespace BlueTooth
                     return ParaDataType;
                 }
             }
-            
+
             public ParameterType Type
             {
                 get
@@ -375,13 +334,7 @@ namespace BlueTooth
                 }
                 return Payload;
             }
-            
-            
-            
-            
-            
-            
-            
+
             public static int SetData(Parameter Para, byte[] DataBuffer, int StartIndex)
             {
                 int Index = StartIndex;
@@ -401,10 +354,6 @@ namespace BlueTooth
                 return Index;
             }
 
-            
-            
-            
-            
             public Parameter Clone()
             {
                 Parameter temp = new Parameter(Name, Size, DataType, Description, Type);
@@ -413,29 +362,20 @@ namespace BlueTooth
 
                 return temp;
             }
-            
-            
-            
-            
+
             public override string ToString()
             {
                 return GetDataString(this);
             }
 
         }
-        
-        
-        
+
         public class ParameterCollection : IEnumerator, IEnumerable
         {
             private List<Parameter> ParaList = new List<Parameter>();
             private TreeNodeCollection ParaNodes = null;
             private byte TotalParameterLength = 0;
 
-            
-            
-            
-            
             public ParameterCollection(TreeNodeCollection Nodes)
             {
                 ParaNodes = Nodes;
@@ -443,11 +383,7 @@ namespace BlueTooth
             }
 
             private int Location = -1;
-            
-            
-            
-            
-            
+
             public Parameter this[int Index]
             {
                 get
@@ -459,16 +395,12 @@ namespace BlueTooth
                     ParaList[Index] = value;
                 }
             }
-            
-            
-            
+
             public void Reset()
             {
                 Location = -1;
             }
-            
-            
-            
+
             public object Current
             {
                 get
@@ -476,10 +408,7 @@ namespace BlueTooth
                     return ParaList[Location];
                 }
             }
-            
-            
-            
-            
+
             public bool MoveNext()
             {
                 if (Location == (ParaList.Count - 1))
@@ -490,10 +419,7 @@ namespace BlueTooth
                 Location++;
                 return (Location < ParaList.Count);
             }
-            
-            
-            
-            
+
             public System.Collections.IEnumerator GetEnumerator()
             {
                 foreach (var item in ParaList)
@@ -502,7 +428,6 @@ namespace BlueTooth
                 }
             }
 
-            
             public int Count
             {
                 get
@@ -510,7 +435,7 @@ namespace BlueTooth
                     return ParaList.Count;
                 }
             }
-            
+
             public byte TotalLength
             {
                 get
@@ -518,7 +443,7 @@ namespace BlueTooth
                     return TotalParameterLength;
                 }
             }
-            
+
             public TreeNodeCollection Nodes
             {
                 get
@@ -533,15 +458,7 @@ namespace BlueTooth
                 foreach (Parameter Para in ParaList)
                     TotalParameterLength += Para.Size;
             }
-            
-            
-            
-            
-            
-            
-            
-            
-            
+
             public Parameter Add(string Name, byte Size, ParameterDataType DataType, string Description = "", ParameterType Type = ParameterType.Data)
             {
                 Parameter Para = new Parameter(Name, Size, DataType, Description, Type);
@@ -553,11 +470,7 @@ namespace BlueTooth
 
                 return Para;
             }
-            
-            
-            
-            
-            
+
             public Parameter Add(Parameter Para)
             {
                 ParaList.Add(Para);
@@ -566,10 +479,7 @@ namespace BlueTooth
 
                 return Para;
             }
-            
-            
-            
-            
+
             public void Insert(int Index, Parameter Para)
             {
                 if (Index >= 0)
@@ -584,10 +494,7 @@ namespace BlueTooth
                         Add(Para);
                 }
             }
-            
-            
-            
-            
+
             public void Remove(string Name)
             {
                 for (int i = 0; i < ParaList.Count; i++)
@@ -601,10 +508,7 @@ namespace BlueTooth
                     }
                 }
             }
-            
-            
-            
-            
+
             public void RemoveAt(int Index)
             {
                 if ((Index >= 0) && (Index < ParaList.Count))
@@ -614,20 +518,14 @@ namespace BlueTooth
                     ParaList.RemoveAt(Index);
                 }
             }
-            
-            
-            
+
             public void Clear()
             {
                 TotalParameterLength = 0;
                 ParaList.Clear();
                 ParaNodes.Clear();
             }
-            
-            
-            
-            
-            
+
             public Parameter GetParameter(string Name)
             {
                 foreach (Parameter Para in ParaList)
@@ -635,11 +533,7 @@ namespace BlueTooth
                         return Para;
                 return null;
             }
-            
-            
-            
-            
-            
+
             public Parameter GetNextParameter(string Name)
             {
                 for (int i = 0; i < ParaList.Count - 1; i++)
@@ -650,12 +544,6 @@ namespace BlueTooth
                 return null;
             }
 
-            
-            
-            
-            
-            
-            
             public static void SetParameters(ParameterCollection Parameters, byte[] DataBuffer, int StartIndex)
             {
                 int Index = StartIndex;
@@ -664,7 +552,6 @@ namespace BlueTooth
                 {
                     Index = Parameter.SetData(Parameters[ParaIndex], DataBuffer, Index);
 
-                    
                     if (Parameters[ParaIndex].Type == ParameterType.ArrayIndicator)
                     {
                         int OrgParaSize = Parameters.Count;
@@ -674,15 +561,14 @@ namespace BlueTooth
                         int RemoveCount = 0;
                         int StoredIndex = ParaIndex + 1;
 
-                        
                         for (int i = 1; i < Parameters.Count; i++)
                         {
-                            if ((Parameters[ParaIndex + i].Type == ParameterType.ArrayData) 
+                            if ((Parameters[ParaIndex + i].Type == ParameterType.ArrayData)
                                 || (Parameters[ParaIndex + i].Type == ParameterType.ArrayDataAndResizableIndicator)
                                 || (Parameters[ParaIndex + i].Type == ParameterType.ArrayDataAndResizableData))
                             {
                                 RemoveCount++;
-                                
+
                                 Stored = true;
                                 foreach (Parameter Para in ArrayParaList)
                                 {
@@ -696,10 +582,10 @@ namespace BlueTooth
                                     ArrayParaList.Add(Parameters[ParaIndex + i]);
                             }
                         }
-                        
+
                         for (int i = 0; i < RemoveCount; i++)
                             Parameters.RemoveAt(ParaIndex + 1);
-                        
+
                         for (int i = 0; i < ArraySize; i++)
                             for (int j = 0; j < ArrayParaList.Count; j++)
                                 Parameters.Insert(StoredIndex++, ArrayParaList[j].Clone());
@@ -709,19 +595,16 @@ namespace BlueTooth
                     {
                         if ((Parameters[ParaIndex + 1].Type == ParameterType.ResizableData)
                             || (Parameters[ParaIndex + 1].Type == ParameterType.ArrayDataAndResizableData))
-                            Parameters[ParaIndex + 1].Size = (byte)(Parameters[ParaIndex].Data[0]);
+                            Parameters[ParaIndex + 1].Size = Parameters[ParaIndex].Data[0];
                     }
                 }
             }
 
         }
 
-        
-        
-        
         public class Command
         {
-            
+
             private ParameterCollection CommandParaCollection = null;
             private ParameterCollection ReturnParaCollection = null;
             private string CommandName = "";
@@ -730,18 +613,9 @@ namespace BlueTooth
             private string CommandDescription = "";
             private TreeNode CommandTreeNode;
             private TreeNode ReturnTreeNode;
-            
-            
-            
+
             public WriteCommand SendCommand = null;
 
-            
-            
-            
-            
-            
-            
-            
             public Command(string Name, int OGF, int OCF, string Description = "")
             {
                 CommandTreeNode = new TreeNode(Name + " [0x" + OCF.ToString("X3") + "]")
@@ -758,7 +632,6 @@ namespace BlueTooth
                 ReturnParaCollection = new ParameterCollection(ReturnTreeNode.Nodes);
             }
 
-            
             public string Name
             {
                 get
@@ -766,7 +639,7 @@ namespace BlueTooth
                     return CommandName;
                 }
             }
-            
+
             public short OpCode
             {
                 get
@@ -774,7 +647,7 @@ namespace BlueTooth
                     return (short)((OpGroupField << 10) | OpCommandField);
                 }
             }
-            
+
             public int OGF
             {
                 get
@@ -782,7 +655,7 @@ namespace BlueTooth
                     return OpGroupField;
                 }
             }
-            
+
             public int OCF
             {
                 get
@@ -790,7 +663,7 @@ namespace BlueTooth
                     return OpCommandField;
                 }
             }
-            
+
             public string Description
             {
                 get
@@ -802,7 +675,7 @@ namespace BlueTooth
                     CommandDescription = value;
                 }
             }
-            
+
             public ParameterCollection CommandParameters
             {
                 get
@@ -814,7 +687,7 @@ namespace BlueTooth
                     CommandParaCollection = value;
                 }
             }
-            
+
             public ParameterCollection ReturnParameters
             {
                 get
@@ -826,7 +699,7 @@ namespace BlueTooth
                     ReturnParaCollection = value;
                 }
             }
-            
+
             public TreeNode CommandNode
             {
                 get
@@ -838,7 +711,7 @@ namespace BlueTooth
                     CommandTreeNode = value;
                 }
             }
-            
+
             public TreeNode ReturnNode
             {
                 get
@@ -851,17 +724,13 @@ namespace BlueTooth
                 }
             }
 
-            
-            
-            
-            
             public byte[] GetCommandPacket()
             {
                 List<byte> Data = new List<byte>
                 {
-                    (byte)(OpCode & 0xff), 
-                    (byte)(OpCode >> 8), 
-                    CommandParaCollection.TotalLength 
+                    (byte)(OpCode & 0xff),
+                    (byte)(OpCode >> 8),
+                    CommandParaCollection.TotalLength
                 };
                 foreach (Parameter Para in CommandParaCollection)
                 {
@@ -871,20 +740,12 @@ namespace BlueTooth
                 }
                 return Data.ToArray();
             }
-            
-            
-            
-            
-            
-            
+
             public void SetReturnParameters(byte[] DataBuffer, int StartIndex)
             {
                 ParameterCollection.SetParameters(ReturnParaCollection, DataBuffer, StartIndex);
             }
-            
-            
-            
-            
+
             public bool Send()
             {
                 bool Status = false;
@@ -894,10 +755,7 @@ namespace BlueTooth
 
                 return Status;
             }
-            
-            
-            
-            
+
             public Command Clone()
             {
                 Command temp = new Command(Name, OGF, OCF, Description);
@@ -913,20 +771,13 @@ namespace BlueTooth
             }
 
         }
-        
-        
-        
+
         public class CommandCollection : IEnumerator, IEnumerable
         {
             private int OpGroupField = 0;
             private List<Command> CommandList = null;
             private TreeNodeCollection CommandNodes = null;
 
-            
-            
-            
-            
-            
             public CommandCollection(int OGF, TreeNodeCollection Nodes)
             {
                 CommandNodes = Nodes;
@@ -935,11 +786,7 @@ namespace BlueTooth
             }
 
             private int Location = -1;
-            
-            
-            
-            
-            
+
             public Command this[int Index]
             {
                 get
@@ -951,16 +798,12 @@ namespace BlueTooth
                     CommandList[Index] = value;
                 }
             }
-            
-            
-            
+
             public void Reset()
             {
                 Location = -1;
             }
-            
-            
-            
+
             public object Current
             {
                 get
@@ -968,10 +811,7 @@ namespace BlueTooth
                     return CommandList[Location];
                 }
             }
-            
-            
-            
-            
+
             public bool MoveNext()
             {
                 if (Location == (CommandList.Count - 1))
@@ -982,10 +822,7 @@ namespace BlueTooth
                 Location++;
                 return (Location < CommandList.Count);
             }
-            
-            
-            
-            
+
             public System.Collections.IEnumerator GetEnumerator()
             {
                 foreach (var reg in CommandList)
@@ -994,7 +831,6 @@ namespace BlueTooth
                 }
             }
 
-            
             public int Count
             {
                 get
@@ -1002,7 +838,7 @@ namespace BlueTooth
                     return this.CommandList.Count;
                 }
             }
-            
+
             public TreeNodeCollection TreeNodes
             {
                 get
@@ -1011,13 +847,6 @@ namespace BlueTooth
                 }
             }
 
-            
-            
-            
-            
-            
-            
-            
             public Command Add(string Name, int OCF, string Description)
             {
                 Command Cmd = new Command(Name, OpGroupField, OCF, Description);
@@ -1026,13 +855,7 @@ namespace BlueTooth
 
                 return Cmd;
             }
-            
-            
-            
-            
-            
-            
-            
+
             public Command Add(Command Cmd)
             {
                 CommandList.Add(Cmd);
@@ -1040,10 +863,7 @@ namespace BlueTooth
 
                 return Cmd;
             }
-            
-            
-            
-            
+
             public void Insert(int Index, Command Cmd)
             {
                 if (Index >= 0)
@@ -1057,10 +877,7 @@ namespace BlueTooth
                         Add(Cmd);
                 }
             }
-            
-            
-            
-            
+
             public void Remove(short OpCode)
             {
                 for (int i = 0; i < CommandList.Count; i++)
@@ -1073,10 +890,7 @@ namespace BlueTooth
                     }
                 }
             }
-            
-            
-            
-            
+
             public void Remove(string Name)
             {
                 for (int i = 0; i < CommandList.Count; i++)
@@ -1089,10 +903,7 @@ namespace BlueTooth
                     }
                 }
             }
-            
-            
-            
-            
+
             public void RemoveAt(int Index)
             {
                 if ((Index >= 0) && (Index < CommandList.Count))
@@ -1101,19 +912,13 @@ namespace BlueTooth
                     CommandNodes.RemoveAt(Index);
                 }
             }
-            
-            
-            
+
             public void Clear()
             {
                 this.CommandList.Clear();
                 this.CommandNodes.Clear();
             }
-            
-            
-            
-            
-            
+
             public Command GetCommand(string Name)
             {
                 Command Cmd = null;
@@ -1128,11 +933,7 @@ namespace BlueTooth
                 }
                 return Cmd;
             }
-            
-            
-            
-            
-            
+
             public Command GetCommand(short OpCode)
             {
                 Command Cmd = null;
@@ -1149,9 +950,7 @@ namespace BlueTooth
             }
 
         }
-        
-        
-        
+
         public class CommandGroup
         {
             private CommandCollection CmdCollection = null;
@@ -1159,20 +958,13 @@ namespace BlueTooth
             private int OpGroupField = 0;
             private TreeNode CommandGroupNode = null;
 
-            
-            
-            
-            
-            
             public CommandGroup(string Name, int OGF)
             {
                 CommandGroupNode = new TreeNode(Name);
                 CommandGroupName = Name;
                 CmdCollection = new CommandCollection(OGF, CommandGroupNode.Nodes);
             }
-            
-            
-            
+
             ~CommandGroup()
             {
                 CmdCollection.Clear();
@@ -1180,7 +972,6 @@ namespace BlueTooth
                 CommandGroupNode = null;
             }
 
-            
             public string Name
             {
                 get
@@ -1193,7 +984,7 @@ namespace BlueTooth
                     CommandGroupNode.Text = value;
                 }
             }
-            
+
             public int OGF
             {
                 get
@@ -1201,7 +992,7 @@ namespace BlueTooth
                     return OpGroupField;
                 }
             }
-            
+
             public CommandCollection Commands
             {
                 get
@@ -1213,7 +1004,7 @@ namespace BlueTooth
                     CmdCollection = value;
                 }
             }
-            
+
             public TreeNode Node
             {
                 get
@@ -1228,12 +1019,9 @@ namespace BlueTooth
 
         }
 
-        
-        
-        
         public class Event
         {
-            
+
             private ParameterCollection ParaCollection = null;
             private string EventName = "";
             private byte EventCode = 0;
@@ -1241,12 +1029,6 @@ namespace BlueTooth
             private EventCollection SubEventCollection = null;
             private TreeNode EventTreeNode;
 
-            
-            
-            
-            
-            
-            
             public Event(string Name, byte Code, string Description = "")
             {
                 EventTreeNode = new TreeNode(Name);
@@ -1257,7 +1039,6 @@ namespace BlueTooth
                 ParaCollection = new ParameterCollection(EventTreeNode.Nodes);
             }
 
-            
             public string Name
             {
                 get
@@ -1265,7 +1046,7 @@ namespace BlueTooth
                     return EventName;
                 }
             }
-            
+
             public byte Code
             {
                 get
@@ -1273,7 +1054,7 @@ namespace BlueTooth
                     return EventCode;
                 }
             }
-            
+
             public string Description
             {
                 get
@@ -1281,7 +1062,7 @@ namespace BlueTooth
                     return EventDescription;
                 }
             }
-            
+
             public ParameterCollection Parameters
             {
                 get
@@ -1293,7 +1074,7 @@ namespace BlueTooth
                     ParaCollection = value;
                 }
             }
-            
+
             public EventCollection SubEvents
             {
                 get
@@ -1305,7 +1086,7 @@ namespace BlueTooth
                     SubEventCollection = value;
                 }
             }
-            
+
             public TreeNode Node
             {
                 get
@@ -1318,39 +1099,24 @@ namespace BlueTooth
                 }
             }
 
-            
-            
-            
-            
-            
-            
             public void SetParameters(byte[] DataBuffer, int StartIndex)
             {
                 ParameterCollection.SetParameters(ParaCollection, DataBuffer, StartIndex);
             }
 
         }
-        
-        
-        
+
         public class EventCollection : IEnumerator, IEnumerable
         {
             private List<Event> EventList = null;
 
-            
-            
-            
             public EventCollection()
             {
                 EventList = new List<Event>();
             }
 
             private int Location = -1;
-            
-            
-            
-            
-            
+
             public Event this[int Index]
             {
                 get
@@ -1362,16 +1128,12 @@ namespace BlueTooth
                     EventList[Index] = value;
                 }
             }
-            
-            
-            
+
             public void Reset()
             {
                 Location = -1;
             }
-            
-            
-            
+
             public object Current
             {
                 get
@@ -1379,10 +1141,7 @@ namespace BlueTooth
                     return EventList[Location];
                 }
             }
-            
-            
-            
-            
+
             public bool MoveNext()
             {
                 if (Location == (EventList.Count - 1))
@@ -1393,10 +1152,7 @@ namespace BlueTooth
                 Location++;
                 return (Location < EventList.Count);
             }
-            
-            
-            
-            
+
             public System.Collections.IEnumerator GetEnumerator()
             {
                 foreach (var reg in EventList)
@@ -1405,7 +1161,6 @@ namespace BlueTooth
                 }
             }
 
-            
             public int Count
             {
                 get
@@ -1414,13 +1169,6 @@ namespace BlueTooth
                 }
             }
 
-            
-            
-            
-            
-            
-            
-            
             public Event Add(string Name, byte Code, string Description)
             {
                 Event Evt = new Event(Name, Code, Description);
@@ -1428,10 +1176,7 @@ namespace BlueTooth
 
                 return Evt;
             }
-            
-            
-            
-            
+
             public void Remove(string Name)
             {
                 for (int i = 0; i < EventList.Count; i++)
@@ -1443,27 +1188,18 @@ namespace BlueTooth
                     }
                 }
             }
-            
-            
-            
-            
+
             public void RemoveAt(int Index)
             {
                 if ((Index >= 0) && (Index < EventList.Count))
                     EventList.RemoveAt(Index);
             }
-            
-            
-            
+
             public void Clear()
             {
                 EventList.Clear();
             }
-            
-            
-            
-            
-            
+
             public Event GetEvent(string Name)
             {
                 Event Evt = null;
@@ -1478,11 +1214,7 @@ namespace BlueTooth
                 }
                 return Evt;
             }
-            
-            
-            
-            
-            
+
             public Event GetEvent(byte Code)
             {
                 Event Evt = null;

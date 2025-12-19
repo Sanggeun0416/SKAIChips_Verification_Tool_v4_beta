@@ -88,7 +88,6 @@ namespace SKAIChips_Verification_Tool.RegisterControl.Infra
         {
             EnsureConnected();
 
-            
             if (_settings.DeviceKind == DeviceKind.FT4222)
             {
                 var buf = data.ToArray();
@@ -121,8 +120,7 @@ namespace SKAIChips_Verification_Tool.RegisterControl.Infra
 
             if (_settings.DeviceKind == DeviceKind.FT4222)
             {
-                
-                
+
                 Write(slaveAddr, w, stop: true);
                 Read(slaveAddr, r, timeoutMs);
                 return;
